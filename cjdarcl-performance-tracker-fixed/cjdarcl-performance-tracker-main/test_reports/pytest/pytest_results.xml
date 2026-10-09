@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="41" time="72.957" timestamp="2026-07-13T06:38:18.916894+00:00" hostname="agent-env-25603bbc-683e-4cda-b304-d45cc65175d7"><testcase classname="tests.test_backend" name="test_dev_login_rep_role" time="0.128" /><testcase classname="tests.test_backend" name="test_dev_login_manager_role" time="0.098" /><testcase classname="tests.test_backend" name="test_auth_me_valid" time="0.191" /><testcase classname="tests.test_backend" name="test_auth_me_missing_token" time="0.092" /><testcase classname="tests.test_backend" name="test_auth_me_invalid_token" time="0.098" /><testcase classname="tests.test_backend" name="test_dashboard_rep" time="0.102" /><testcase classname="tests.test_backend" name="test_dashboard_manager_greater" time="0.283" /><testcase classname="tests.test_backend" name="test_daily_records_rep" time="0.102" /><testcase classname="tests.test_backend" name="test_daily_records_manager_more" time="0.191" /><testcase classname="tests.test_backend" name="test_pipeline_manager_all" time="0.094" /><testcase classname="tests.test_backend" name="test_pipeline_rep_subset" time="0.190" /><testcase classname="tests.test_backend" name="test_pipeline_won_creates_customer" time="0.395" /><testcase classname="tests.test_backend" name="test_customers_rep_rbac" time="0.093" /><testcase classname="tests.test_backend" name="test_payments_all_excludes_paid" time="0.095" /><testcase classname="tests.test_backend" name="test_payments_reminder" time="0.203" /><testcase classname="tests.test_backend" name="test_logout_invalidates" time="0.283" /><testcase classname="tests.test_deploy_coldstart" name="test_cold_start_fast_after_wipe" time="2.051" /><testcase classname="tests.test_deploy_coldstart" name="test_background_sync_populates_collections" time="1.003" /><testcase classname="tests.test_deploy_coldstart" name="test_manual_sync_endpoint" time="1.616" /><testcase classname="tests.test_deploy_coldstart" name="test_manual_sync_requires_auth" time="0.097" /><testcase classname="tests.test_monthly_target" name="test_manager_monthly_target_equals_env_total" time="0.192" /><testcase classname="tests.test_monthly_target" name="test_rep_monthly_target_proportional_share" time="0.200" /><testcase classname="tests.test_monthly_target" name="test_sum_of_rep_targets_matches_team_total" time="1.588" /><testcase classname="tests.test_monthly_target" name="test_manager_placement_unchanged_by_target_logic" time="0.213" /><testcase classname="tests.test_monthly_target" name="test_sync_status_endpoint" time="0.191" /><testcase classname="tests.test_monthly_target" name="test_sync_endpoint_manager" time="1.434" /><testcase classname="tests.test_pipeline_customer_swap" name="test_pipeline_contains_real_prospects" time="31.487"><failure message="requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='performance-hub-529.preview.emergentagent.com', port=443): Max retries exceeded with url: /api/pipeline (Caused by ConnectTimeoutError(&lt;HTTPSConnection(host='performance-hub-529.preview.emergentagent.com', port=443) at 0xfb76e5699750&gt;, 'Connection to performance-hub-529.preview.emergentagent.com timed out. (connect timeout=15)'))">/root/.venv/lib/python3.11/site-packages/urllib3/connection.py:204: in _new_conn
+    sock = connection.create_connection(
+/root/.venv/lib/python3.11/site-packages/urllib3/util/connection.py:85: in create_connection
+    raise err
+/root/.venv/lib/python3.11/site-packages/urllib3/util/connection.py:73: in create_connection
+    sock.connect(sa)
+E   TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+/root/.venv/lib/python3.11/site-packages/urllib3/connectionpool.py:788: in urlopen
+    response = self._make_request(
+/root/.venv/lib/python3.11/site-packages/urllib3/connectionpool.py:488: in _make_request
+    raise new_e
+/root/.venv/lib/python3.11/site-packages/urllib3/connectionpool.py:464: in _make_request
+    self._validate_conn(conn)
+/root/.venv/lib/python3.11/site-packages/urllib3/connectionpool.py:1106: in _validate_conn
+    conn.connect()
+/root/.venv/lib/python3.11/site-packages/urllib3/connection.py:759: in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/urllib3/connection.py:213: in _new_conn
+    raise ConnectTimeoutError(
+E   urllib3.exceptions.ConnectTimeoutError: (&lt;HTTPSConnection(host='performance-hub-529.preview.emergentagent.com', port=443) at 0xfb76e5699750&gt;, 'Connection to performance-hub-529.preview.emergentagent.com timed out. (connect timeout=15)')
+
+The above exception was the direct cause of the following exception:
+/root/.venv/lib/python3.11/site-packages/requests/adapters.py:696: in send
+    resp = conn.urlopen(
+/root/.venv/lib/python3.11/site-packages/urllib3/connectionpool.py:842: in urlopen
+    retries = retries.increment(
+/root/.venv/lib/python3.11/site-packages/urllib3/util/retry.py:543: in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='performance-hub-529.preview.emergentagent.com', port=443): Max retries exceeded with url: /api/pipeline (Caused by ConnectTimeoutError(&lt;HTTPSConnection(host='performance-hub-529.preview.emergentagent.com', port=443) at 0xfb76e5699750&gt;, 'Connection to performance-hub-529.preview.emergentagent.com timed out. (connect timeout=15)'))
+
+During handling of the above exception, another exception occurred:
+tests/test_pipeline_customer_swap.py:70: in test_pipeline_contains_real_prospects
+    r = requests.get(f"{BASE_URL}/api/pipeline", headers=H(mgr_token), timeout=15)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/api.py:87: in get
+    return request("get", url, params=params, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/api.py:71: in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:651: in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/sessions.py:784: in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/requests/adapters.py:717: in send
+    raise ConnectTimeout(e, request=request)
+E   requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='performance-hub-529.preview.emergentagent.com', port=443): Max retries exceeded with url: /api/pipeline (Caused by ConnectTimeoutError(&lt;HTTPSConnection(host='performance-hub-529.preview.emergentagent.com', port=443) at 0xfb76e5699750&gt;, 'Connection to performance-hub-529.preview.emergentagent.com timed out. (connect timeout=15)'))</failure></testcase><testcase classname="tests.test_pipeline_customer_swap" name="test_pipeline_does_not_leak_acquired_customers" time="26.471" /><testcase classname="tests.test_pipeline_customer_swap" name="test_pipeline_stages_taxonomy_only" time="0.130" /><testcase classname="tests.test_pipeline_customer_swap" name="test_pipeline_deal_count_matches_sync_stats" time="0.211" /><testcase classname="tests.test_pipeline_customer_swap" name="test_customers_contains_only_acquired" time="0.098" /><testcase classname="tests.test_pipeline_customer_swap" name="test_customers_do_not_include_pipeline_prospects" time="0.095" /><testcase classname="tests.test_pipeline_customer_swap" name="test_customers_all_have_positive_revenue" time="0.096" /><testcase classname="tests.test_pipeline_customer_swap" name="test_customer_count_matches_sync_stats" time="0.207" /><testcase classname="tests.test_pipeline_customer_swap" name="test_no_company_in_both_pipeline_and_customers" time="0.237" /><testcase classname="tests.test_pipeline_customer_swap" name="test_manager_monthly_target_still_2cr" time="0.101" /><testcase classname="tests.test_pipeline_customer_swap" name="test_all_reps_monthly_target_sum_still_2cr" time="1.582" /><testcase classname="tests.test_pipeline_customer_swap" name="test_rep_pipeline_only_own_rows" time="0.201" /><testcase classname="tests.test_pipeline_customer_swap" name="test_rep_customers_only_own_rows" time="0.095" /><testcase classname="tests.test_pipeline_customer_swap" name="test_patch_pipeline_to_won_creates_customer" time="0.381" /><testcase classname="tests.test_pipeline_customer_swap" name="test_sync_status_has_all_counters" time="0.096" /></testsuite></testsuites>

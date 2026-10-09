@@ -1,0 +1,172 @@
+{
+  "app_name": "SalesForce Internal CRM",
+  "personality": "5 Brutalist Mobile",
+  "personality_one_liner": "An authoritative, high-density, no-nonsense enterprise tool focused on operational clarity, structural grids, and uncompromised data visibility.",
+  "color": {
+    "surface": "#FFFFFF",
+    "onSurface": "#111827",
+    "surfaceSecondary": "#F9FAFB",
+    "onSurfaceSecondary": "#374151",
+    "surfaceTertiary": "#F3F4F6",
+    "onSurfaceTertiary": "#4B5563",
+    "surfaceInverse": "#111827",
+    "onSurfaceInverse": "#FFFFFF",
+    "brand": "#111827",
+    "brandPrimary": "#111827",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#374151",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "#E5E7EB",
+    "onBrandTertiary": "#111827",
+    "success": "#059669",
+    "onSuccess": "#FFFFFF",
+    "warning": "#D97706",
+    "onWarning": "#FFFFFF",
+    "error": "#DC2626",
+    "onError": "#FFFFFF",
+    "border": "#E5E7EB",
+    "borderStrong": "#111827",
+    "divider": "#D1D5DB"
+  },
+  "typography": {
+    "displayFontFamily": "Space Grotesk",
+    "textFontFamily": "Geist",
+    "monoFontFamily": "JetBrains Mono",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Use rigid grids, hard alignment, and visible spacing systems. Structural margins are absolute. Avoid soft padding; prefer edge-to-edge separators.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 0,
+    "md": 0,
+    "lg": 0,
+    "pill": 999
+  },
+  "shadow_tier": "0",
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": "false",
+    "do's": [
+      "Use solid surface or surfaceSecondary backgrounds.",
+      "Rely on thick borders and dividers for hierarchy instead of elevation or blur."
+    ],
+    "dont's": [
+      "No blur effects.",
+      "No translucent surfaces.",
+      "No drop shadows."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "none",
+      "android": "none",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "none",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Login",
+      "purpose": "Secure gateway for reps and managers via Google Workspace.",
+      "states": {
+        "loading": "Solid charcoal screen with a brutalist mono-font loading percentage.",
+        "empty": "N/A",
+        "error": "Hard red error banner at the top with a sharp white retry button."
+      },
+      "layout": "Full-bleed architectural background photo with a heavy gradient-to-dark scrim. At the bottom 30%, a massive 'Space Grotesk' app title and a full-width sharp-cornered Google Sign-in button."
+    },
+    {
+      "name": "Dashboard",
+      "purpose": "Command center for the rep/manager showing KPIs (Demands vs Placement, Pipeline, Targets, Outstanding).",
+      "states": {
+        "loading": "Skeleton grids with 2pt borders.",
+        "empty": "Sharp illustration with 'No data for today' in Space Grotesk.",
+        "error": "Exposed error state block with mono-font error code and retry CTA."
+      },
+      "layout": "Grid-based modular dashboard. Top: Oversized JetBrains Mono metric counters with 2pt borders separating them. Middle: Bar chart using stark monochrome + success green for placements. Bottom: Outstanding payments summary block with a hard red accent."
+    },
+    {
+      "name": "Pipeline",
+      "purpose": "Track new acquisitions through stages (Lead -> Contacted -> Demo -> Negotiation -> Won).",
+      "states": {
+        "loading": "Staggered skeleton cards.",
+        "empty": "Sharp wireframe illustration 'Pipeline Empty'.",
+        "error": "Error block with retry action."
+      },
+      "layout": "Vertical stage-grouped list (mobile-friendly Kanban alternative). Sticky stage headers with heavy bottom borders. Cards have 1pt borders, no shadows, displaying deal values in JetBrains Mono. Swipe left/right on cards to advance/revert stages."
+    },
+    {
+      "name": "Customers",
+      "purpose": "Directory of acquired customers.",
+      "states": {
+        "loading": "List of skeleton rectangles.",
+        "empty": "No customers found message.",
+        "error": "Error block with retry action."
+      },
+      "layout": "Edge-to-edge list. Each row separated by a 1pt divider. Real logos (via transparent PNGs) on the left, customer name in Geist bold, total revenue in JetBrains Mono on the right."
+    },
+    {
+      "name": "Payments",
+      "purpose": "Chase outstanding and overdue payments.",
+      "states": {
+        "loading": "Skeleton list.",
+        "empty": "No outstanding payments.",
+        "error": "Error block with retry action."
+      },
+      "layout": "High-density data table format. Left column: Client name. Right column: Amount (Mono). Overdue rows have a 2pt Signal Red left border. 'Mark Reminder Sent' is a sharp, flat icon button in the row."
+    },
+    {
+      "name": "Profile",
+      "purpose": "User settings, logout, and manager team-view toggle.",
+      "states": {
+        "loading": "Skeleton UI.",
+        "empty": "N/A",
+        "error": "Error block."
+      },
+      "layout": "Brutalist settings list. Large avatar/initials at top. Hard toggles (color flip, no soft shadows). 'Manager View' toggle prominently framed in a 2pt bordered box."
+    }
+  ],
+  "images": {
+    "login_bg": {
+      "url": "https://images.unsplash.com/photo-1707823942892-3316eeb091a0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2OTV8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBnbGFzcyUyMG9mZmljZSUyMGJ1aWxkaW5nJTIwZXh0ZXJpb3IlMjBhcmNoaXRlY3R1cmFsJTIwcGhvdG9ncmFwaHl8ZW58MHx8fHwxNzgzODM2MDgzfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Modern glass office building architecture"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly adhere to the 5 Brutalist Mobile personality: use 0px border radius (sharp corners), no shadows, no glassmorphism, and 1pt/2pt solid borders for structural framing.",
+    "Data components (deal amounts, payment values, KPI numbers, dates) MUST use the 'JetBrains Mono' font for a technical, operational feel.",
+    "Do NOT use any blues or purples. Use #111827 (Charcoal) for primary actions, #059669 (Emerald) for target achievements/wins, and #DC2626 (Signal Red) specifically for overdue payments and errors.",
+    "The Pipeline screen should use a vertical list grouped by stage with sticky headers (mobile-adapted Kanban) rather than a horizontally scrolling web-like Kanban board. Add swipe gestures to move items between stages.",
+    "For the Customers list, assume we will load actual customer logo PNGs. Use square, sharp-edged image containers. Use initials with a solid background as a fallback only if the image fails.",
+    "Ensure all interactive elements (buttons, toggles, tabs) use color-flip states instead of scale animations or soft opacity fades.",
+    "The Dashboard should feel like a dense, high-contrast command center. Use 2pt thick borders (`borderStrong`) to segment major KPI blocks."
+  ],
+  "haptics": {
+    "events": {
+      "button_press": "light",
+      "tab_change": "light",
+      "stage_move_success": "medium",
+      "reminder_sent": "heavy",
+      "error": "error"
+    }
+  }
+}
