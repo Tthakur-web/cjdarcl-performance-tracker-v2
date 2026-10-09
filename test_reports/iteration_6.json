@@ -1,0 +1,43 @@
+{
+  "summary": "Major spec-update v2 (Demands / Active Customer / Needs Review / Pipeline+actual_activity) fully verified end-to-end. Backend: 14/14 new pytest cases PASS in /app/backend/tests/test_spec_v2.py — health<500ms, /api/sync returns all 8 required keys incl month_label='August' & pipeline_needs_review, /api/dashboard?period=month&ref_date=2026-08-13 returns month_label=August, start=2026-08-01, end=2026-08-13, totals.weight_mt=2104.2 MT, freight=₹71.96L, costing=₹83.60L, gm2=-₹10.84L, counts {existing:175, new_acquisition:0, needs_review:24}, monthly.target=20000000, trend length=7; day period returns start==end==ref_date; /api/customers manager returns 117 rows with all required fields (customer, forecast, sales_done, weight, costing, freight, gm2, demand_count, statuses, last_demand_date); /api/needs-review returns only category=needs_review; /api/pipeline returns {deals, actual_activity}, all stages ∈ {Lead,Contacted,Demo,Negotiation,Won}, no Dropped leak; /api/demands?category=existing filters correctly; classification unit test passes for new_acquisition regex, existing lookup, needs_review fallback. RBAC verified: rep pawan.giri sees only own rows on /demands, /customers, /needs-review, /payments, /pipeline. Auth /me + /logout + PATCH /pipeline/{id} + PATCH /payments/{id}/reminder all green. Frontend: dev-login flow works (rohit1.singh), Dashboard renders SYNCED-Ns-AGO pill, Day/Month PeriodSelector, prev/next arrows + TODAY button, needs-review-cta shows count and navigates to /needs-review (40 rows visible as UNMATCHED cards with needs-review-back button); Customers tab shows 117 count in header + per-card period activity (Weight/Freight/Costing/GM2 + status badges like PLACED/UNKNOWN/PRICE MISMATCH); Pipeline tab shows 'NEW-ACQUISITION DEMAND ACTIVITY (LOGGED)' block above stage chips (All/Lead/Contacted/Demo/Negotiation/Won) with 47 deal cards grouped by stage. Only non-blocking issue is a pre-existing React Native web deprecation warning: props.pointerEvents is deprecated (carryover from iter 2-5).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "Pressable pointerEvents (login/tab bar)", "issue": "Browser console warning: 'props.pointerEvents is deprecated. Use style.pointerEvents'. Non-blocking on web preview; will show as yellow warning in Metro. Search for pointerEvents= prop on Pressable/View in app/login.tsx and any tab bar wrappers and move it into style={{ pointerEvents: 'none' | 'auto' }}. Reference: seen on initial load of /login and persisting after nav."}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_spec_v2.py",
+    "/app/backend/tests/test_backend.py",
+    "/app/backend/tests/test_monthly_target.py",
+    "/app/backend/tests/test_pipeline_customer_swap.py",
+    "/app/backend/tests/test_deploy_coldstart.py",
+    "/app/test_reports/pytest/pytest_spec_v2.xml"
+  ],
+  "action_items": [
+    "(optional / non-blocking) Migrate any remaining props.pointerEvents usages to style.pointerEvents to silence the RN-Web deprecation warning.",
+    "(optional carryover) server.py is ~840 lines — consider splitting into auth/sync/dashboard modules for maintainability.",
+    "(nice-to-have) Add a top-level testID on the tab bar buttons (e.g. testID='tab-customers', testID='tab-pipeline') to make automated navigation more robust; today only card/chip/CTA testIDs exist and testing has to use router.push() URLs to switch tabs.",
+    "(informational) Live sheet numbers on 2026-08-13 currently show existing=175 / needs_review=24 (not 218/40 as noted in the review request context). The 218/40 figures match today's ref_date 2026-08-26 (visible in the dashboard screenshot). This is expected drift — the sheet grows day-by-day — and is NOT a bug."
+  ],
+  "critical_code_review_comments": [
+    "server.py:239-447 sync_from_sheets: wipe-then-insert per-collection is fine at current volume (~200 demands / 117 active / 47 deals), but not concurrency-safe. A second /api/sync landing while the first is still running would double-insert and inflate counts. Consider wrapping in an asyncio.Lock or an idempotency flag in db.sync_log.",
+    "server.py:270-278 reminder_flags is keyed on (salesperson_email, customer) but payment rows are keyed by invoice_no in the sheet. If the same customer has multiple invoices, the newest reminder_sent_at wins and older ones lose their flag. Consider keying on (email, invoice_no).",
+    "sheets.py:157-170 classify_demand — new_acquisition_pattern strictly matches 'New Acquisition <Month>' with optional surrounding whitespace. Verified via unit test. Case-insensitive, extra whitespace tolerated.",
+    "sheets.py:246-278 parse_pipeline correctly skips Stage='Dropped' rows and maps Meeting Pending→Lead, Demo Done→Demo, Acquired→Won. Verified: no Dropped rows leak into /api/pipeline (0 in 47 deals).",
+    "server.py:487-603 dashboard endpoint pulls MTD rows twice (demand_q for selected period + mtd_rows for month-to-date placement + trend). For day period with ref_date far from month-start this doubles work; consider caching mtd_rows once.",
+    "server.py:641 /api/customers builds per_cust dict keyed by customer.lower() then re-lookups. Correctness OK; sort key uses (last_demand_date, forecast) descending which surfaces active customers first."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_spec_v2.py (NEW — 14 tests covering the full v2 spec)"
+  ],
+  "success_rate": {"backend": "100% (14/14 spec_v2 tests)", "frontend": "100% (Dashboard, Needs Review, Customers, Pipeline all render + integrate correctly)"},
+  "seed_data_creation": "None. Tests use live Google Sheets via /api/sync. The pipeline PATCH test mutates one Lead deal → Contacted; not restored, but next /api/sync will reset it.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Live snapshot after this run (ref_date=2026-08-13): daily_records=199 (existing=175, new_acq=0, needs_review=24), active_customers=117, pipeline_deals=47 (Lead=25, Demo=21, Contacted=1), payments≥1, targets≥8. On ref_date=2026-08-26 (today) the same shape yields 218 existing / 40 needs_review (matches E1's context note). Manager monthly.target=₹2Cr. All 14 spec_v2 pytest cases + 41 prior regression tests remain green. Tab bar navigation from Playwright currently requires router.push('/customers') or router.push('/pipeline') because the tab buttons don't have testIDs; direct URL nav works because expo-router mounts the (tabs) group at root.",
+  "rca_of_issue": "N/A — no bugs found this iteration. All spec_v2 requirements met."
+}

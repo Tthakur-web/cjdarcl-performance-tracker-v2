@@ -1,0 +1,37 @@
+{
+  "summary": "Monthly Target manager-exclusion fix VERIFIED. All 26/26 backend pytest passed (previously 25/26). The critical invariant Σ(all 8 reps' monthly.target) == ₹20,000,000 now holds EXACTLY (delta = 0.000000 rupees, well within the ±1 rupee tolerance). Manager (rohit1.singh) target still = ₹2 Cr. Rep pawan.giri target = ₹26,66,666.67 (~₹26.67L, proportional based on new denominator that excludes the manager). monthly.placement values unchanged for both manager (₹63.09L) and reps. No regressions in dev-login, /api/auth/me, /api/pipeline, /api/customers, /api/payments, PATCH endpoints, /api/sync, /api/sync/status, logout, or RBAC. Frontend not re-tested per request (no frontend changes).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "Pressable pointerEvents", "issue": "(Carryover from iter 2/3, not re-verified this run) 'props.pointerEvents is deprecated. Use style.pointerEvents' console warning on login screen. Non-blocking."}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_backend.py",
+    "/app/backend/tests/test_deploy_coldstart.py",
+    "/app/backend/tests/test_monthly_target.py",
+    "/app/test_reports/pytest/pytest_results.xml",
+    "/app/test_reports/pytest/pytest_monthly_target.xml"
+  ],
+  "action_items": [
+    "(optional / carryover) Migrate props.pointerEvents to style.pointerEvents on login screen to silence deprecation warning.",
+    "(optional / carryover) server.py is ~730 lines — consider splitting into auth/sync/dashboard modules.",
+    "(optional / carryover) Add async lock to sync_from_sheets to prevent race on concurrent /api/sync calls."
+  ],
+  "critical_code_review_comments": [
+    "server.py:322-327 fix looks correct: `rep_targets = [t for t in all_targets if (t.get('salesperson_email') or '').lower() not in manager_lower]` then `total_forecast = sum(t.get('target', 0) for t in rep_targets)` — invariant restored, verified numerically (delta = 0)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (26/26)", "frontend": "N/A (not re-tested per request)"},
+  "seed_data_creation": "None. Tests use live Google Sheet data via background sync.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Monthly-target fix confirmed. All backend tests green (26/26). Per-rep targets: pawan.giri=₹26,66,666.67, anupam.malik=₹26,66,666.67, akash1.chauhan=₹35,55,555.56, manoj21.kumar=₹4,44,444.44, ajay8.kumar=₹44,44,444.44, vijay5.singh=₹4,44,444.44, pawan1.saini=₹31,11,111.11, kapil.chandila=₹26,66,666.67. Sum = ₹2,00,00,000.00 exactly.",
+  "rca_of_issue": "Resolved. Previous iteration: total_forecast counted manager's own pipeline forecast row, orphaning ~₹23.5L of the ₹2Cr team target. Fix applied in server.py:322-327 filters `all_targets` to exclude MANAGER_EMAILS before computing total_forecast, so the proportional split now covers 100% of the team target across the 8 reps. Numerically verified: Σ(reps.target) == 20,000,000.000000, delta 0.0 rupees."
+}
